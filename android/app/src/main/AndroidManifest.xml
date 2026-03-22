@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     <application
         android:label="med_reminder"
         android:name="${applicationName}"
@@ -30,6 +36,26 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <!-- Receiver para reprogramar alarmas al reiniciar el teléfono -->
+        <receiver
+            android:name="me.carda.awesome_notifications.core.broadcasters.receivers.ActionEventBroadcastReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="me.carda.awesome_notifications.NOTIFICATION_ACTION_EVENT"/>
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.gdelataillade.alarm.AlarmReceiver"
+            android:exported="false"/>
+
+        <!-- Activity para mostrar la pantalla de alarma con pantalla bloqueada -->
+        <activity
+            android:name="com.gdelataillade.alarm.AlarmActivity"
+            android:exported="false"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            android:launchMode="singleTop"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

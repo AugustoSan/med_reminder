@@ -1,31 +1,37 @@
+import './../../utils/medications_utils.dart';
+
 class Medication {
   final int? id;
   final String nombre;
-  final String dosis;
-  final String? instrucciones;
+  final String? descripcion;
   final String color;
   final String icono;
-  final int activo;
 
   Medication({
     this.id,
     required this.nombre,
-    required this.dosis,
-    this.instrucciones,
+    this.descripcion,
     this.color = '#4A90D9',
     this.icono = 'pill',
-    this.activo = 1,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'nombre': nombre,
-      'dosis': dosis,
-      'instrucciones': instrucciones,
-      'color': color,
+      'descripcion': descripcion,
+      'color': MedicationsUtils.normalizeColor(color),
       'icono': icono,
-      'activo': activo,
+    };
+  }
+
+  // Método específico para inserción (sin ID)
+  Map<String, dynamic> toInsertMap() {
+    return {
+      'nombre': nombre,
+      'descripcion': descripcion,
+      'color': MedicationsUtils.normalizeColor(color),
+      'icono': icono,
     };
   }
 
@@ -33,11 +39,10 @@ class Medication {
     return Medication(
       id: map['id'],
       nombre: map['nombre'],
-      dosis: map['dosis'],
-      instrucciones: map['instrucciones'],
-      color: map['color'] ?? '#4A90D9',
+      descripcion: map['descripcion'],
+      color: MedicationsUtils.validateColor(map['color'] ?? '#4A90D9'),
       icono: map['icono'] ?? 'pill',
-      activo: map['activo'] ?? 1,
     );
   }
+
 }

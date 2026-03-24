@@ -31,11 +31,9 @@ class DatabaseHelper {
       CREATE TABLE medications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         nombre TEXT NOT NULL,
-        dosis TEXT NOT NULL,
-        instrucciones TEXT,
+        descripcion TEXT,
         color TEXT NOT NULL DEFAULT '#4A90D9',
         icono TEXT NOT NULL DEFAULT 'pill',
-        activo INTEGER NOT NULL DEFAULT 1
       )
     ''');
 
@@ -45,8 +43,10 @@ class DatabaseHelper {
         medicationId INTEGER NOT NULL,
         hora TEXT NOT NULL,
         dias TEXT NOT NULL,
-        frecuencia TEXT NOT NULL,
+        frecuencia INTEGER NOT NULL,
+        dosis TEXT NOT NULL,
         intervaloHoras INTEGER,
+        instrucciones TEXT,
         FOREIGN KEY (medicationId) REFERENCES medications (id) ON DELETE CASCADE
       )
     ''');
@@ -56,7 +56,7 @@ class DatabaseHelper {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         scheduleId INTEGER NOT NULL,
         fecha TEXT NOT NULL,
-        estado TEXT NOT NULL,
+        estado INTEGER NOT NULL,
         FOREIGN KEY (scheduleId) REFERENCES medication_schedules (id) ON DELETE CASCADE
       )
     ''');

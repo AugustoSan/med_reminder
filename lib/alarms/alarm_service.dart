@@ -53,7 +53,7 @@ class AlarmService {
       ),
       notificationSettings: NotificationSettings(
         title: '💊 ${med.nombre}',
-        body: '${med.dosis} · ${schedule.hora}',
+        body: '${schedule.dosis} · ${schedule.hora}',
         stopButton: 'Tomé mi dosis',
         icon: 'notification_icon',
       ),
@@ -108,7 +108,7 @@ class AlarmService {
         ),
         notificationSettings: NotificationSettings(
           title: '💊 ${med.nombre}',
-          body: '${med.dosis} · ${schedule.hora}',
+          body: '${schedule.dosis} · ${schedule.hora}',
           stopButton: 'Tomé mi dosis',
           icon: 'notification_icon',
         ),

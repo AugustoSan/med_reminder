@@ -1,14 +1,21 @@
 enum DoseEstado {
+  pendiente,
   tomada,
-  saltada,
-  perdida,
+  perdida;
+
+  static DoseEstado fromIndex(int index) {
+    if (index >= 0 && index < values.length) {
+      return values[index];
+    }
+    return pendiente;
+  }
 }
 
 class DoseHistory{
   final int? id;
   final int scheduleId;
   final String fecha;
-  final String estado;
+  final DoseEstado estado;
 
   DoseHistory({
     required this.id,
@@ -22,7 +29,15 @@ class DoseHistory{
       'id': id,
       'scheduleId': scheduleId,
       'fecha': fecha,
-      'estado': estado,
+      'estado': estado.index,
+    };
+  }
+
+  Map<String, dynamic> toInsertMap() {
+    return {
+      'scheduleId': scheduleId,
+      'fecha': fecha,
+      'estado': estado.index,
     };
   }
 
@@ -31,7 +46,7 @@ class DoseHistory{
       id: map['id'],
       scheduleId: map['scheduleId'],
       fecha: map['fecha'],
-      estado: map['estado'],
+      estado: DoseEstado.fromIndex(map['estado']),
     );
   }
 }

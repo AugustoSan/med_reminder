@@ -6,7 +6,7 @@ class MedicationDAO {
 
   Future<int> insertMedication(Medication medication) async {
     final db = await _helper.database;
-    return await db.insert('medications', medication.toMap());
+    return await db.insert('medications', medication.toInsertMap());
   }
 
   // Obtener todos los medicamentos activos

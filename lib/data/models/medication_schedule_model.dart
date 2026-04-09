@@ -1,5 +1,5 @@
-import 'package:med_reminder/database/models/dose_history.dart';
-import 'package:med_reminder/database/models/medication.dart';
+import 'package:med_reminder/data/models/dose_history_model.dart';
+import 'package:med_reminder/data/models/medication_model.dart';
 
 enum Frecuencia {
   diaria,
@@ -15,7 +15,7 @@ enum Frecuencia {
   }
 }
 
-class MedicationSchedule {
+class MedicationScheduleModel {
   final int? id;
   final int medicationId;
   final String hora; // Ejemplo: "08:00"
@@ -25,7 +25,7 @@ class MedicationSchedule {
   final int? intervaloHoras; // Solo para "cada X días"
   final String? instrucciones;
 
-  MedicationSchedule({
+  MedicationScheduleModel({
     this.id,
     required this.medicationId,
     required this.hora,
@@ -63,8 +63,8 @@ class MedicationSchedule {
     };
   }
 
-  factory MedicationSchedule.fromMap(Map<String, dynamic> map) {
-    return MedicationSchedule(
+  factory MedicationScheduleModel.fromMap(Map<String, dynamic> map) {
+    return MedicationScheduleModel(
       id: map['id'],
       medicationId: map['medicationId'],
       hora: map['hora'],
@@ -79,14 +79,14 @@ class MedicationSchedule {
 
 class MedicationScheduleEntity {
   final int id;
-  final Medication medication;
+  final MedicationModel medication;
   final String hora; // Ejemplo: "08:00"
   final String dias; // Ejemplo: '[1,2,3,4,5]' (1=lun … 7=dom)
   final Frecuencia frecuencia; // Ejemplo: "diaria", "semanal", "mensual", "cada X días"
   final String dosis;
   final int? intervaloHoras; // Solo para "cada X días"
   final String? instrucciones;
-  final List<DoseHistory> history;
+  final List<DoseHistoryModel> history;
 
   MedicationScheduleEntity({
     required this.id,

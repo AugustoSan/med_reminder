@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 // import 'package:med_reminder/database/dao/daos.dart';
 // import 'package:med_reminder/database/dao/schedule_dao.dart';
-import 'package:med_reminder/database/models/models.dart';
-import 'package:med_reminder/utils/medications_utils.dart';
+import 'package:med_reminder/data/models/models.dart';
+import 'package:med_reminder/core/utils/medications_utils.dart';
+
+import '../widgets/widgets.dart';
 
 class AddMedicationScreen extends StatefulWidget {
-  final Medication? medicamentosExistentes;
+  final MedicationModel? medicamentosExistentes;
   const AddMedicationScreen({super.key, this.medicamentosExistentes});
 
   @override
@@ -51,7 +53,7 @@ class _AddMedicationScreenState extends State<AddMedicationScreen> {
     Icons.healing_rounded,
   ];
 
-  List<DoseHistory> _history = [];
+  // List<DoseHistory> _history = [];
 
   @override
 void initState() {
@@ -697,14 +699,21 @@ void initState() {
           children: [
             // ── Nombre y dosis ──────────────────────────
             _buildSeccion('Medicamento'),
-            _buildInput(
-              controller: _nombreCtrl,
+            // _buildInput(
+            //   controller: _nombreCtrl,
+            //   label: 'Nombre del medicamento',
+            //   hint: 'Ej: Paracetamol',
+            //   icon: Icons.medication_rounded,
+            //   validator: (v) =>
+            //       v!.isEmpty ? 'Ingresa el nombre' : null,
+            // ),
+            MedicamentoSearchField(
               label: 'Nombre del medicamento',
-              hint: 'Ej: Paracetamol',
-              icon: Icons.medication_rounded,
-              validator: (v) =>
-                  v!.isEmpty ? 'Ingresa el nombre' : null,
-            ),
+                // controller: _nombreCtrl,
+                hint: 'Ej: Paracetamol',
+                validator: (v) =>
+                    v!.isEmpty ? 'Ingresa el nombre' : null,
+              ),
             const SizedBox(height: 12),
             _buildInput(
               controller: _dosisCtrl,

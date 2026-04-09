@@ -2,12 +2,12 @@
 
 import '../database_helper.dart';
 import '../models/models.dart';
-import 'daos.dart';
+import 'services.dart';
 
-class ScheduleDao {
+class ScheduleService {
   final DatabaseHelper _helper = DatabaseHelper();
-  final MedicationDAO _medicationDao = MedicationDAO();
-  final HistoryDao _historyDao = HistoryDao();
+  final MedicationService _medicationService = MedicationService();
+  final HistoryService _historyService = HistoryService();
 
   // Future<int> insertSchedule(MedicationSchedule schedule) async {
   //   final db = await _helper.database;
@@ -18,20 +18,20 @@ class ScheduleDao {
     final db = await _helper.database;
     int medicationId = schedule.medication.id ?? 0;
     if(schedule.medication.id  == null) {
-      medicationId = await _medicationDao.insertMedication(schedule.medication);
+      medicationId = await _medicationService.insertMedication(schedule.medication);
     }
 
-    final medicationSchedule = MedicationSchedule(medicationId: medicationId, hora: schedule.hora, dias: schedule.dias, frecuencia: schedule.frecuencia, dosis: schedule.dosis);
+    final medicationSchedule = MedicationScheduleModel(medicationId: medicationId, hora: schedule.hora, dias: schedule.dias, frecuencia: schedule.frecuencia, dosis: schedule.dosis);
 
     final scheduleId = await db.insert('medication_schedules', medicationSchedule.toInsertMap());
 
     for (var element in schedule.history) {
-      await _historyDao.insertDoseHistory(DoseHistory(id:0, scheduleId: scheduleId, fecha: element.fecha, estado: element.estado));
+      await _historyService.insertDoseHistory(DoseHistoryModel(id:0, scheduleId: scheduleId, fecha: element.fecha, estado: element.estado));
     }
     return scheduleId;
   }
 
-  Future<List<MedicationSchedule>> getAllScheduleMedications() async {
+  Future<List<MedicationScheduleModel>> getAllScheduleMedications() async {
     final db = await _helper.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'medication_schedules',
@@ -39,11 +39,11 @@ class ScheduleDao {
       orderBy: 'id DESC',
       whereArgs: [1],
     );
-    return List.generate(maps.length, (i) => MedicationSchedule.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => MedicationScheduleModel.fromMap(maps[i]));
   }
 
   // Buscar por ID
-  Future<MedicationSchedule?> getScheduleMedicationById(int id) async {
+  Future<MedicationScheduleModel?> getScheduleMedicationById(int id) async {
     final db = await _helper.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'medication_schedules',
@@ -51,13 +51,13 @@ class ScheduleDao {
       whereArgs: [id],
     );
     if (maps.isNotEmpty) {
-      return MedicationSchedule.fromMap(maps.first);
+      return MedicationScheduleModel.fromMap(maps.first);
     }
     return null;
   }
 
   // Buscar por ID
-  Future<Medication?> _getMedicationById(int id) async {
+  Future<MedicationModel?> _getMedicationById(int id) async {
     final db = await _helper.database;
     final List<Map<String, dynamic>> maps = await db.query(
       'medications',
@@ -65,12 +65,12 @@ class ScheduleDao {
       whereArgs: [id],
     );
     if (maps.isNotEmpty) {
-      return Medication.fromMap(maps.first);
+      return MedicationModel.fromMap(maps.first);
     }
     return null;
   }
 
-  Future<List<DoseHistory>> _getDoseHistoryById(int id) async {
+  Future<List<DoseHistoryModel>> _getDoseHistoryById(int id) async {
     final db = await _helper.database;
     
     final List<Map<String, dynamic>> maps = await db.query(
@@ -80,7 +80,7 @@ class ScheduleDao {
       orderBy: 'fecha ASC',
     );
     
-    return List.generate(maps.length, (i) => DoseHistory.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => DoseHistoryModel.fromMap(maps[i]));
   }
 
   Future<List<MedicationScheduleEntity>> getAllScheduleMedicationsEntity() async {
@@ -92,16 +92,16 @@ class ScheduleDao {
       whereArgs: [1],
     );
     
-    final List<MedicationSchedule> listMaps = List.generate(
+    final List<MedicationScheduleModel> listMaps = List.generate(
       maps.length, 
-      (i) => MedicationSchedule.fromMap(maps[i])
+      (i) => MedicationScheduleModel.fromMap(maps[i])
     );
     
     // Usar Future.wait para ejecutar todas las operaciones asíncronas en paralelo
     final List<MedicationScheduleEntity?> nullableEntities = await Future.wait(
       listMaps.map((item) async {
-        final Medication? med = await _getMedicationById(item.medicationId);
-        final List<DoseHistory> history = await _getDoseHistoryById(item.id ?? 0);
+        final MedicationModel? med = await _getMedicationById(item.medicationId);
+        final List<DoseHistoryModel> history = await _getDoseHistoryById(item.id ?? 0);
         if (med == null) return null;
         return MedicationScheduleEntity(
           id: item.id ?? -1,

@@ -1,17 +1,17 @@
-import 'package:med_reminder/database/database_helper.dart';
+import 'package:med_reminder/data/database_helper.dart';
 
 import '../models/models.dart';
 
-class HistoryDao {
+class HistoryService {
   final DatabaseHelper _helper = DatabaseHelper();
 
-  Future<int> insertDoseHistory(DoseHistory history) async {
+  Future<int> insertDoseHistory(DoseHistoryModel history) async {
     final db = await _helper.database;
     return await db.insert('dose_history', history.toInsertMap());
   }
 
   // Historial de los ultimos N dias para un scheduleId
-  Future<List<DoseHistory>> getUltimos({int dias = 30}) async {
+  Future<List<DoseHistoryModel>> getUltimos({int dias = 30}) async {
     final db = await _helper.database;
     final desde = DateTime.now()
       .subtract(Duration(days: dias))
@@ -24,10 +24,10 @@ class HistoryDao {
       orderBy: 'fecha DESC',
     );
 
-    return maps.map((m) => DoseHistory.fromMap(m)).toList();
+    return maps.map((m) => DoseHistoryModel.fromMap(m)).toList();
   }
 
-  Future<List<DoseHistory>> getHoy() async {
+  Future<List<DoseHistoryModel>> getHoy() async {
     final db = await _helper.database;
     final hoy = DateTime.now().toIso8601String().substring(0, 10);
     
@@ -38,10 +38,10 @@ class HistoryDao {
       orderBy: 'fecha DESC',
     );
 
-    return maps.map((m) => DoseHistory.fromMap(m)).toList();
+    return maps.map((m) => DoseHistoryModel.fromMap(m)).toList();
   }
 
-  Future<List<DoseHistory>> getTodayDoseHistory() async {
+  Future<List<DoseHistoryModel>> getTodayDoseHistory() async {
     final db = await _helper.database;
     
     // Obtener la fecha actual en el mismo formato que guardas
@@ -55,10 +55,10 @@ class HistoryDao {
       orderBy: 'fecha ASC',
     );
     
-    return List.generate(maps.length, (i) => DoseHistory.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => DoseHistoryModel.fromMap(maps[i]));
   }
 
-  Future<List<DoseHistory>> getDoseHistoryById(int id) async {
+  Future<List<DoseHistoryModel>> getDoseHistoryById(int id) async {
     final db = await _helper.database;
     
     final List<Map<String, dynamic>> maps = await db.query(
@@ -68,6 +68,6 @@ class HistoryDao {
       orderBy: 'fecha ASC',
     );
     
-    return List.generate(maps.length, (i) => DoseHistory.fromMap(maps[i]));
+    return List.generate(maps.length, (i) => DoseHistoryModel.fromMap(maps[i]));
   }
 }

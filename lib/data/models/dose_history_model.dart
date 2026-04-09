@@ -11,13 +11,13 @@ enum DoseEstado {
   }
 }
 
-class DoseHistory{
+class DoseHistoryModel{
   final int? id;
   final int scheduleId;
   final String fecha;
   final DoseEstado estado;
 
-  DoseHistory({
+  DoseHistoryModel({
     required this.id,
     required this.scheduleId,
     required this.fecha,
@@ -41,8 +41,8 @@ class DoseHistory{
     };
   }
 
-  factory DoseHistory.fromMap(Map<String, dynamic> map) {
-    return DoseHistory(
+  factory DoseHistoryModel.fromMap(Map<String, dynamic> map) {
+    return DoseHistoryModel(
       id: map['id'],
       scheduleId: map['scheduleId'],
       fecha: map['fecha'],

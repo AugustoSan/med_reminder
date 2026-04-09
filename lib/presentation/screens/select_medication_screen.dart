@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:med_reminder/database/dao/medication_dao.dart';
-import 'package:med_reminder/database/models/medication.dart';
+import 'package:med_reminder/data/services/medication_service.dart';
+import 'package:med_reminder/data/models/medication_model.dart';
 import 'add_medication_screen.dart';
 
 class SelectMedicationScreen extends StatefulWidget {
@@ -13,8 +13,8 @@ class SelectMedicationScreen extends StatefulWidget {
 
 class _SelectMedicationScreenState
     extends State<SelectMedicationScreen> {
-  final MedicationDAO _dao = MedicationDAO();
-  List<Medication> _medicamentos = [];
+  final MedicationService _medicationService = MedicationService();
+  List<MedicationModel> _medicamentos = [];
   bool _cargando = true;
 
   // Colores e iconos igual que en AddMedicationScreen
@@ -43,7 +43,7 @@ class _SelectMedicationScreenState
   }
 
   Future<void> _cargarMedicamentos() async {
-    final lista = await _dao.getActiveMedications();
+    final lista = await _medicationService.getActiveMedications();
     setState(() {
       _medicamentos = lista;
       _cargando = false;
@@ -172,7 +172,7 @@ class _SelectMedicationScreenState
     );
   }
 
-  Widget _buildMedicamentoItem(Medication med) {
+  Widget _buildMedicamentoItem(MedicationModel med) {
     // Parsea el índice de color e icono guardado en la BD
     final colorIndex = int.tryParse(med.color) ??
         _colores.indexWhere(

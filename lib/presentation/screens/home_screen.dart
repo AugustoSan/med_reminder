@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 // import 'package:med_reminder/database/dao/daos.dart';
 // import 'package:med_reminder/alarms/alarm_service.dart';
-import 'package:med_reminder/screens/add_medication_screen.dart';
-import 'package:med_reminder/utils/medications_utils.dart';
+import 'package:med_reminder/presentation/screens/add_medication_screen.dart';
+import 'package:med_reminder/core/utils/medications_utils.dart';
 
-import '../database/models/models.dart';
+import '../../data/models/models.dart';
 // import 'package:med_reminder/database/models/medication_schedule.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,17 +17,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
 
   final List<MedicationScheduleEntity> _medicamentosSchedule = [
-    new MedicationScheduleEntity(id: 1, dosis: '1 tableta', hora: '3:00', dias: '[1,2,3,4,5]', frecuencia: Frecuencia.diaria, medication: new Medication(nombre: 'Paracetamol'), history: [
-      DoseHistory(id: 1, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: -12)).toString(),estado: DoseEstado.perdida),
-      DoseHistory(id: 2, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: -6)).toString(),estado: DoseEstado.tomada),
-      DoseHistory(id: 3, scheduleId: 1, fecha: DateTime.now().toString(),estado: DoseEstado.pendiente),
-      DoseHistory(id: 4, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: 6)).toString(),estado: DoseEstado.pendiente),
+    new MedicationScheduleEntity(id: 1, dosis: '1 tableta', hora: '3:00', dias: '[1,2,3,4,5]', frecuencia: Frecuencia.diaria, medication: new MedicationModel(nombre: 'Paracetamol'), history: [
+      DoseHistoryModel(id: 1, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: -12)).toString(),estado: DoseEstado.perdida),
+      DoseHistoryModel(id: 2, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: -6)).toString(),estado: DoseEstado.tomada),
+      DoseHistoryModel(id: 3, scheduleId: 1, fecha: DateTime.now().toString(),estado: DoseEstado.pendiente),
+      DoseHistoryModel(id: 4, scheduleId: 1, fecha: DateTime.now().add(Duration(hours: 6)).toString(),estado: DoseEstado.pendiente),
     ], ),
-    new MedicationScheduleEntity(id: 2, dosis: '1/2 capsula', hora: '3:00', dias: '[1,2,3,4,5]', frecuencia: Frecuencia.diaria, medication: new Medication(nombre: 'Tramadol'), history: [
-      DoseHistory(id: 5, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: -12)).toString(),estado: DoseEstado.tomada),
-      DoseHistory(id: 6, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: -6)).toString(),estado: DoseEstado.perdida),
-      DoseHistory(id: 7, scheduleId: 2, fecha: DateTime.now().toString(),estado: DoseEstado.pendiente),
-      DoseHistory(id: 9, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: 6)).toString(),estado: DoseEstado.pendiente),
+    new MedicationScheduleEntity(id: 2, dosis: '1/2 capsula', hora: '3:00', dias: '[1,2,3,4,5]', frecuencia: Frecuencia.diaria, medication: new MedicationModel(nombre: 'Tramadol'), history: [
+      DoseHistoryModel(id: 5, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: -12)).toString(),estado: DoseEstado.tomada),
+      DoseHistoryModel(id: 6, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: -6)).toString(),estado: DoseEstado.perdida),
+      DoseHistoryModel(id: 7, scheduleId: 2, fecha: DateTime.now().toString(),estado: DoseEstado.pendiente),
+      DoseHistoryModel(id: 9, scheduleId: 2, fecha: DateTime.now().add(Duration(hours: 6)).toString(),estado: DoseEstado.pendiente),
     ], ),
   ]; 
 
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final today = DateTime.now();
     final todayString = '${today.year}-${today.month.toString().padLeft(2, '0')}-${today.day.toString().padLeft(2, '0')}';
     
-    List<DoseHistory> todayPendingDoses = [];
+    List<DoseHistoryModel> todayPendingDoses = [];
     
     for (var med in _medicamentosSchedule) {
       // Buscar dosis pendientes de hoy

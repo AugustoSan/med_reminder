@@ -1,3 +1,4 @@
+import 'package:med_reminder/core/constants/app_constants.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -18,7 +19,7 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'med_reminder.db');
+    String path = join(await getDatabasesPath(), AppConstants.databaseName);
     return await openDatabase(
       path,
       version: 1,
@@ -33,7 +34,7 @@ class DatabaseHelper {
         nombre TEXT NOT NULL,
         descripcion TEXT,
         color TEXT NOT NULL DEFAULT '#4A90D9',
-        icono TEXT NOT NULL DEFAULT 'pill',
+        icono TEXT NOT NULL DEFAULT 'pill'
       )
     ''');
 
@@ -64,6 +65,7 @@ class DatabaseHelper {
     // Índices para mejorar el rendimiento
     await db.execute('CREATE INDEX idx_history_fecha ON dose_history (fecha)');
     await db.execute('CREATE INDEX idx_schedules_med ON medication_schedules (medicationId)');
+    await db.execute('CREATE INDEX idx_nombre ON medications (nombre)');
   }
 
 }

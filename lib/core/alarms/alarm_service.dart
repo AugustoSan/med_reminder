@@ -1,9 +1,10 @@
 import 'package:alarm/alarm.dart';
 import 'package:alarm/utils/alarm_set.dart';
+import 'package:med_reminder/core/constants/app_constants.dart';
 // import 'package:flutter_timezone/flutter_timezone.dart';
 // import 'package:med_reminder/alarms/alarm_callback.dart';
 
-import '../database/models/models.dart';
+import '../../data/models/models.dart';
 
 class AlarmService {
   // Inicializa el sistema de alarmas
@@ -20,8 +21,8 @@ class AlarmService {
 
   // Programa una alarma para un horario de medicamento
   static Future<void> programar({
-    required Medication med,
-    required MedicationSchedule schedule,
+    required MedicationModel med,
+    required MedicationScheduleModel schedule,
   }) async {
     final ahora = DateTime.now();
     final partes = schedule.hora.split(':');
@@ -45,9 +46,9 @@ class AlarmService {
     final settings = AlarmSettings(
       id: schedule.id!, // el id del schedule es el id de la alarma
       dateTime: proximaDosis,
-      assetAudioPath: 'assets/sounds/alarm.mp3',
-      loopAudio: true,
-      vibrate: true,
+      assetAudioPath: AppConstants.alarmAudioPath,
+      loopAudio: AppConstants.alarmLoopAudio,
+      vibrate: AppConstants.alarmVibrate,
       volumeSettings: VolumeSettings.fade(
         fadeDuration: Duration(seconds: 5),
       ),
@@ -66,8 +67,8 @@ class AlarmService {
 
   // Programa alarmas para TODOS los días de la semana configurados
   static Future<void> programarSemana({
-    required Medication med,
-    required MedicationSchedule schedule,
+    required MedicationModel med,
+    required MedicationScheduleModel schedule,
   }) async {
     // dias_semana viene como JSON string: '[1,2,3,4,5]'
     // 1=lunes, 7=domingo (igual que DateTime.weekday en Dart)
@@ -100,9 +101,9 @@ class AlarmService {
       final settings = AlarmSettings(
         id: alarmId,
         dateTime: fechaDosis,
-        assetAudioPath: 'assets/sounds/alarm.mp3',
-        loopAudio: true,
-        vibrate: true,
+        assetAudioPath: AppConstants.alarmAudioPath,
+        loopAudio: AppConstants.alarmLoopAudio,
+        vibrate: AppConstants.alarmVibrate,
         volumeSettings: VolumeSettings.fade(
           fadeDuration: Duration(seconds: 5),
         ),
@@ -134,8 +135,8 @@ class AlarmService {
 
   // Reprograma todas las alarmas activas — úsalo al reiniciar el teléfono
   static Future<void> reprogramarTodas({
-    required List<Medication> meds,
-    required List<MedicationSchedule> schedules,
+    required List<MedicationModel> meds,
+    required List<MedicationScheduleModel> schedules,
   }) async {
     await Alarm.stopAll();
     for (final schedule in schedules) {

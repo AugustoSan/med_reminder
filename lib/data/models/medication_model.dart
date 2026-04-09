@@ -1,13 +1,13 @@
-import './../../utils/medications_utils.dart';
+import '../../core/utils/medications_utils.dart';
 
-class Medication {
+class MedicationModel {
   final int? id;
   final String nombre;
   final String? descripcion;
   final String color;
   final String icono;
 
-  Medication({
+  MedicationModel({
     this.id,
     required this.nombre,
     this.descripcion,
@@ -35,8 +35,8 @@ class Medication {
     };
   }
 
-  factory Medication.fromMap(Map<String, dynamic> map) {
-    return Medication(
+  factory MedicationModel.fromMap(Map<String, dynamic> map) {
+    return MedicationModel(
       id: map['id'],
       nombre: map['nombre'],
       descripcion: map['descripcion'],
